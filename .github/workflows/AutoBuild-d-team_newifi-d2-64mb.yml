@@ -118,6 +118,25 @@ jobs:
         remove-codeql: 'true'
         remove-docker-images: 'true'
 
+    - name: Free Disk Space (Aggressive)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        # 移除大文件以腾出空间
+        tool-cache: true
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+        
+    - name: Clean Apt Cache
+      run: |
+        # 强制清理 apt 缓存，防止残留文件占用空间
+        sudo -E apt-get clean
+        sudo -E apt-get autoremove --purge
+        df -hT # 打印磁盘空间情况，用于调试
+        
     - name: Checkout
       uses: actions/checkout@main
       with:
